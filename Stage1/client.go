@@ -8,6 +8,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"time"
+	"log"
+	"io/ioutil"
 )
 type FileInfo struct {
     Name    string
@@ -57,8 +59,9 @@ func WalkAllFilesInDir(dir string) error {
 				panic(err)
 			}
 			defer resp.Body.Close()
-		
+			
 			fmt.Println("response Status:", resp.Status)
+			fmt.Println("Message: File info Added")
 			
 			
 		}
@@ -66,11 +69,54 @@ func WalkAllFilesInDir(dir string) error {
 	})
 
  }
+ func MakeRequest() {
+	resp, err := http.Get("http://localhost:5000/api/filedata/filestats")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(string(body))
+}
+func getData(){
+	var input string
+	fmt.Println("********************************************Go client App************************************************************")
+	fmt.Println("HI, What action would you liketo perform")
+	fmt.Println("1.Traverse and POST data")
+	fmt.Println("2.Retrive File Statistic data")
+	fmt.Println("--help.Type --help for Help")
+	fmt.Scanln(&input)
+	if input=="1"{
+		fmt.Println("Enter a valid path for Traversing:")
+		fmt.Scanln(&input)
+		if input != " "{
+
+		 WalkAllFilesInDir(input)
+		 getData()
+		} else{
+
+			fmt.Println("Enter a valid path")
+			getData()
+		}
+		
+	}else if input=="2"{
+		fmt.Println("********************************File Statistics***************************************")
+		MakeRequest()
+		getData()
+	}else if input=="--help"{
+		fmt.Println("help messeage")
+		getData()
+	}else{
+		fmt.Println("Enter a valid input")
+		getData()
+	}
+}
 
 func main() {
-	var input string
-	fmt.Print("Enter a valid path")
-	fmt.Scanln(&input)
-	
-    WalkAllFilesInDir(input)
+
+	getData()
 }

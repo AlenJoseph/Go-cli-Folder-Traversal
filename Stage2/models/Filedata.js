@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//create admin schema
+//create Filedata schema
 const FileSchema = new Schema({
     name:{
         type:String,

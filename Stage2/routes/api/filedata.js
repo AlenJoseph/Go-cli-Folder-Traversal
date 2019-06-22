@@ -135,6 +135,7 @@ router.get('/filestats',(req,res)=>{
      });
     })
     Promise.all([p1, p2, p3,p4,p5,p6]).then(values => { 
+        
         console.log(values);
         console.log(data)
         
@@ -147,9 +148,9 @@ router.get('/filestats',(req,res)=>{
         filestats
         .save()
         .then(filestats=>res.status(200).json(filestats))
-        .catch(err=>console.log(err));
         
-    });
+        
+    })
  
 
 })

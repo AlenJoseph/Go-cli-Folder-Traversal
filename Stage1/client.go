@@ -108,6 +108,13 @@ func getData(){
 		MakeRequest()
 		getData()
 	}else if input=="--help"{
+		fmt.Println("****************************************Help******************************************")
+		fmt.Println("### Prerequisites\n")
+		fmt.Println("1) Go language")
+		fmt.Println("2) Node Js")
+		fmt.Println("###  Getting Started(Installation) \n")
+		fmt.Println("1) First go to Stage 2 Folder open terminal run npm install && npm run server'")
+		fmt.Println("2) Then after the server starts go Stage 1 folder 'go run client.go'")
 		fmt.Println("help messeage")
 		getData()
 	}else{

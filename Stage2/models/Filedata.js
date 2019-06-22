@@ -7,11 +7,19 @@ const FileSchema = new Schema({
         type:String,
         required:true
     },
-    email :{
+    extention :{
         type:String,
         required:true
     },
-    password :{
+    size :{
+        type: String,
+        required:true
+    },
+    path :{
+        type: String,
+        required:true
+    },
+    globalpath :{
         type: String,
         required:true
     }

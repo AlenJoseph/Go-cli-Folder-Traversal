@@ -5,32 +5,49 @@ import (
     "os"
 	"path/filepath"
 	"net/http"
-	"io/ioutil"
 	"bytes"
 	"encoding/json"
+	"time"
 )
-type FileData struct {
-	file_name, file_path string
+type FileInfo struct {
+    Name    string
+    Size    int64
+	ModTime time.Time
+	FilePath string
+	Dir string
 }
+
 func WalkAllFilesInDir(dir string) error {
     return filepath.Walk(dir, func(path string, info os.FileInfo, e error) error {
         if e != nil {
             return e
         }
-
+		list := []FileInfo{}
+		
+		
         // check if it is a regular file (not dir)
         if info.Mode().IsRegular() {
-			
-			data:= FileData{
-				file_name:info.Name(),
-				file_path:path,
+			var rootdir = dir
+			data := FileInfo{
+				Name:info.Name(),
+				Size:info.Size(),
+				ModTime:info.ModTime(),
+				FilePath:path,
+				Dir:rootdir,
+
+				
 			}
-			url := "http://localhost:5000/api/filedata/updateinfo"
-			fmt.Println("URL:>", url)
+			list = append(list, data)
+			output, err := json.Marshal(list)
+			
+    		if err != nil {
+       			 fmt.Print(err)
+				}
+				
+   			url := "http://localhost:5000/api/filedata/updateinfo"
 		
-			locJson, err := json.Marshal(data)
-			fmt.Println(locJson)
-			req, err := http.NewRequest("POST", url, bytes.NewBuffer(locJson))
+			
+			req, err := http.NewRequest("POST", url, bytes.NewBuffer(output))
 			req.Header.Set("X-Custom-Header", "myvalue")
 			req.Header.Set("Content-Type", "application/json")
 		
@@ -42,10 +59,6 @@ func WalkAllFilesInDir(dir string) error {
 			defer resp.Body.Close()
 		
 			fmt.Println("response Status:", resp.Status)
-			fmt.Println("response Headers:", resp.Header)
-			body, _ := ioutil.ReadAll(resp.Body)
-			 fmt.Print(body)
-			
 			
 			
 		}
